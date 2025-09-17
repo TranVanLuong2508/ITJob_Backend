@@ -13,7 +13,10 @@ export class AuthService {
     if (user) {
       const isValidPass = this.userService.isValidPassword(pass, user.password);
       if (isValidPass) {
-        return true;
+        const { password, ...result } = user.toObject();
+        console.log('check user', user);
+        return result;
+        // return true;
       }
     }
     return null;
