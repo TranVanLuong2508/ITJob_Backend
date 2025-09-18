@@ -5,6 +5,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  // mặc định dkdi tên là jwt
+  //export class JwtStrategy extends PassportStrategy(Strategy, 'custom-jwt')
   constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
