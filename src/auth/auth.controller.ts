@@ -1,0 +1,23 @@
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
+import { Public, User } from 'src/decorators/customize';
+import { IUser } from 'src/users/user.interface';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  @Public()
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  async login(@Request() req) {
+    return this.authService.login(req.user);
+  }
+
+  // @UseGuards(JwtAuthGuard) //← "Cổng kiểm soát" - chỉ user có token hợp lệ mới vào được ==> đã dùng global
+  @Get('profile')
+  getProfile(@User() user: IUser) {
+    return user;
+  }
+}

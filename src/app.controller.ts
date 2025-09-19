@@ -7,33 +7,4 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Public } from 'src/decorators/customize';
 
 @Controller()
-export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private configService: ConfigService,
-    private authService: AuthService,
-  ) {}
-
-  @Get()
-  getHello(): string {
-    console.log('check port', this.configService.get<string>('PORT'));
-    return this.appService.getHello();
-  }
-
-  // @Post('login')
-  // async login(@Request() req) {
-  //   return this.authService.login(req.user);
-  // }
-  @Public()
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
-  }
-
-  // @UseGuards(JwtAuthGuard) //← "Cổng kiểm soát" - chỉ user có token hợp lệ mới vào được
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
-}
+export class AppController {}
