@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/users/user.interface';
+import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -39,5 +40,20 @@ export class AuthService {
       role,
       email,
     };
+  }
+
+  async register(registerUserDto: RegisterUserDto) {
+    const userCheck = await this.userService.findOneByUserName(
+      registerUserDto.email,
+    );
+    if (userCheck) {
+      return;
+    } else {
+      const newUser = await this.userService.register(registerUserDto);
+      return {
+        _id: newUser._id,
+        createdAt: new Date(),
+      };
+    }
   }
 }

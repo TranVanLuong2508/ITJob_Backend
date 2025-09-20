@@ -3,4 +3,8 @@ export interface IUser {
   name: string;
   email: string;
   role: string;
+  age: number;
+  gender: string;
+  address: string;
+  refreshToken: string;
 }

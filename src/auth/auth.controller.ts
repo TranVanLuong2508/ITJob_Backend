@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
-import { Public, User } from 'src/decorators/customize';
+import { Public, ResponseMessage, User } from 'src/decorators/customize';
+import { CreateUserDto, RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { IUser } from 'src/users/user.interface';
 
 @Controller('auth')
@@ -19,5 +27,12 @@ export class AuthController {
   @Get('profile')
   getProfile(@User() user: IUser) {
     return user;
+  }
+
+  @Public()
+  @Post('register')
+  @ResponseMessage('Register a new user')
+  register(@Body() registerUserDto: RegisterUserDto) {
+    return this.authService.register(registerUserDto);
   }
 }

@@ -37,6 +37,9 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Address must not be empty' })
   address: string;
 
+  @IsNotEmpty({ message: 'Role must not be empty' })
+  role: string;
+
   @IsDefined()
   @IsNotEmptyObject()
   @IsObject()
