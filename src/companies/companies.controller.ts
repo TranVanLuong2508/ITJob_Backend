@@ -7,11 +7,12 @@ import {
   Param,
   Delete,
   Query,
+  Version,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { Public, User } from 'src/decorators/customize';
+import { ResponseMessage, User } from 'src/decorators/customize';
 import { IUser } from 'src/users/user.interface';
 
 @Controller('companies')
@@ -24,6 +25,7 @@ export class CompaniesController {
   }
 
   @Get()
+  @ResponseMessage('Fetch company list with pagination')
   findAll(
     @Query('page') currentPage: string,
     @Query('limit') limit: string,
