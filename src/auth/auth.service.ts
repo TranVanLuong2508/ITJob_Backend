@@ -15,7 +15,6 @@ export class AuthService {
       const isValidPass = this.userService.isValidPassword(pass, user.password);
       if (isValidPass) {
         const { password, ...result } = user.toObject();
-        console.log('check user', user);
         return result;
         // return true;
       }
