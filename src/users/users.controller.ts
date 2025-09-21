@@ -28,6 +28,7 @@ export class UsersController {
     return this.usersService.findAll(currentPage, limit, qs);
   }
 
+  @Public()
   @Get(':id')
   @ResponseMessage('Fetch user by id')
   findOne(@Param('id') id: string) {
@@ -43,7 +44,8 @@ export class UsersController {
   @Patch()
   @ResponseMessage('Update a User')
   update(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
-    return this.usersService.update(updateUserDto, user);
+    const updatedUser = this.usersService.update(updateUserDto, user);
+    return updatedUser;
   }
 
   @Delete(':id')

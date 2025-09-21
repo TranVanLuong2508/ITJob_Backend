@@ -43,17 +43,10 @@ export class AuthService {
   }
 
   async register(registerUserDto: RegisterUserDto) {
-    const userCheck = await this.userService.findOneByUserName(
-      registerUserDto.email,
-    );
-    if (userCheck) {
-      return;
-    } else {
-      const newUser = await this.userService.register(registerUserDto);
-      return {
-        _id: newUser._id,
-        createdAt: new Date(),
-      };
-    }
+    const newUser = await this.userService.register(registerUserDto);
+    return {
+      _id: newUser?._id,
+      createdAt: newUser.createdAt,
+    };
   }
 }

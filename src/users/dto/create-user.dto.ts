@@ -40,7 +40,6 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Role must not be empty' })
   role: string;
 
-  @IsDefined()
   @IsNotEmptyObject()
   @IsObject()
   @ValidateNested()

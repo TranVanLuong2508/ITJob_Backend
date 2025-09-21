@@ -23,16 +23,17 @@ export class UsersService {
   };
 
   async create(createUserDto: CreateUserDto, currentUser: IUser) {
-    const hasedPassword = this.getHashPassword(createUserDto.password);
     const isUserExist = await this.userModel.findOne({
       email: createUserDto.email,
     });
     if (isUserExist) {
-      return {
-        message: 'User Already existed',
-      };
+      throw new BadRequestException(
+        `Email: ${createUserDto.email} already exists in the system. Please use a different email.`,
+      );
     } else {
-      await this.userModel.create({
+      const hasedPassword = this.getHashPassword(createUserDto.password);
+
+      const newUser = await this.userModel.create({
         name: createUserDto.name,
         email: createUserDto.email,
         password: hasedPassword,
@@ -40,33 +41,40 @@ export class UsersService {
         gender: createUserDto.gender,
         address: createUserDto.address,
         role: createUserDto.role,
-        company: {
-          _id: createUserDto.company._id,
-          name: createUserDto.company.name,
-        },
+        company: createUserDto.company,
         createdBy: {
           _id: currentUser._id,
           email: currentUser.email,
         },
       });
       return {
-        _id: currentUser._id,
-        createdAt: new Date(),
+        _id: newUser._id,
+        createdAt: newUser.createdAt,
       };
     }
   }
 
   async register(registerUserDto: RegisterUserDto) {
+    const isExist = await this.userModel.findOne({
+      email: registerUserDto.email,
+    });
+    if (isExist) {
+      throw new BadRequestException(
+        `Email: ${registerUserDto.email} already exists in the system. Please use a different email.`,
+      );
+    }
     const hasedPassword = this.getHashPassword(registerUserDto.password);
-    const user = await this.userModel.create({
+
+    const newUser = await this.userModel.create({
       name: registerUserDto.name,
       email: registerUserDto.email,
       password: hasedPassword,
       age: registerUserDto.age,
       gender: registerUserDto.gender,
       address: registerUserDto.address,
+      role: 'USER',
     });
-    return user;
+    return newUser;
   }
 
   async findAll(currentPage: number, limit: number, qs: string) {
@@ -113,8 +121,8 @@ export class UsersService {
   }
 
   async update(updateUserDto: UpdateUserDto, currentUser: IUser) {
-    const userUpdated = await this.userModel.updateOne(
-      { email: updateUserDto.email },
+    const updatedUser = await this.userModel.updateOne(
+      { _id: updateUserDto._id },
       {
         $set: {
           name: updateUserDto.name,
@@ -122,21 +130,17 @@ export class UsersService {
           gender: updateUserDto.gender,
           address: updateUserDto.address,
           role: updateUserDto.role,
-          company: {
-            _id: updateUserDto.company._id,
-            name: updateUserDto.company.name,
-          },
+          company: updateUserDto.company,
           updatedBy: {
             _id: currentUser._id,
             email: currentUser.email,
           },
         },
       },
-      { runValidators: true },
     );
 
     return {
-      userUpdated,
+      updatedUser,
     };
   }
 
@@ -147,7 +151,9 @@ export class UsersService {
 
     const foundUser = await this.userModel.findById(id);
     if (foundUser && foundUser.email === 'admin@gmail.com') {
-      throw new BadRequestException('CAN NOT DELETE ADMIN ACCOUNT');
+      throw new BadRequestException(
+        'CAN NOT DELETE ADMIN ACCOUNT : admin@gmail.com',
+      );
     }
     await this.userModel.updateOne(
       { _id: id },
@@ -159,7 +165,7 @@ export class UsersService {
       },
     );
 
-    return await this.userModel.softDelete({
+    return this.userModel.softDelete({
       _id: id,
     });
   }
