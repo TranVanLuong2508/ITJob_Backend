@@ -3,13 +3,15 @@ import {
   Controller,
   Get,
   Post,
-  Request,
+  Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { Public, ResponseMessage, User } from 'src/decorators/customize';
-import { CreateUserDto, RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { IUser } from 'src/users/user.interface';
 
 @Controller('auth')
@@ -19,8 +21,8 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Req() req, @Res({ passthrough: true }) response: Response) {
+    return this.authService.login(req.user, response);
   }
 
   // @UseGuards(JwtAuthGuard) //← "Cổng kiểm soát" - chỉ user có token hợp lệ mới vào được ==> đã dùng global
@@ -34,5 +36,24 @@ export class AuthController {
   @ResponseMessage('Register a new user')
   register(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.register(registerUserDto);
+  }
+
+  @Get('account')
+  @ResponseMessage('Get user information')
+  GetAccount(@User() user: IUser) {
+    return {
+      user: user,
+    };
+  }
+
+  @Public()
+  @Get('refresh')
+  @ResponseMessage('Get User by refresh token')
+  handleRefresh(
+    @Req() request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const refresh_token = request.cookies['refresh_token'];
+    return this.authService.processNewToken(refresh_token, response);
   }
 }

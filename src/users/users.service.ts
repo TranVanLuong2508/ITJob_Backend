@@ -116,6 +116,17 @@ export class UsersService {
     });
   }
 
+  async findUserByRefreshToken(refresh_token: string) {
+    return await this.userModel.findOne({ refreshToken: refresh_token });
+  }
+
+  async updateUserToken(refresh_token: string, id: string) {
+    return await this.userModel.updateOne(
+      { _id: id },
+      { refreshToken: refresh_token },
+    );
+  }
+
   isValidPassword(password: string, hash: string) {
     return compareSync(password, hash);
   }
