@@ -21,11 +21,11 @@ export class UsersController {
   @Get()
   @ResponseMessage('Fetch user with paginate')
   findAll(
-    @Query('page') currentPage: number,
-    @Query('limit') limit: number,
+    @Query('current') currentPage: number,
+    @Query('pageSize') pagesize: number,
     @Query() qs: string,
   ) {
-    return this.usersService.findAll(currentPage, limit, qs);
+    return this.usersService.findAll(+currentPage, +pagesize, qs);
   }
 
   @Public()

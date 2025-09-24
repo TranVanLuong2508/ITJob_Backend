@@ -7,7 +7,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { Public, ResponseMessage, User } from 'src/decorators/customize';
@@ -55,5 +55,11 @@ export class AuthController {
   ) {
     const refresh_token = request.cookies['refresh_token'];
     return this.authService.processNewToken(refresh_token, response);
+  }
+
+  @Post('logout')
+  @ResponseMessage('Logout User')
+  logout(@User() user: IUser, @Res({ passthrough: true }) response: Response) {
+    return this.authService.handleLogout(user, response);
   }
 }

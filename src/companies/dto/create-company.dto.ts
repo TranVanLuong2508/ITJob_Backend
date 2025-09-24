@@ -1,7 +1,6 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateCompanyDto {
-  //   @IsEmail({}, { message: 'Must be in email format' })
   @IsNotEmpty({ message: 'Name must not be empty' })
   name: string;
 

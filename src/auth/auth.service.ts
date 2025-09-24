@@ -53,7 +53,7 @@ export class AuthService {
 
     //create refresh_token
     const refresh_token = this.generateRefreshToken(payload);
-    await this.userService.updateUserToken(refresh_token, _id);
+    await this.userService.updateUserToken(refresh_token, _id.toString());
 
     //set cookies
     response.cookie('refresh_token', refresh_token, {
@@ -90,7 +90,6 @@ export class AuthService {
       });
 
       const user = await this.userService.findUserByRefreshToken(token);
-      if (!user) console.log('nnp ');
       if (user) {
         console.log('user', user);
         const { _id, name, role, email } = user;
@@ -132,5 +131,11 @@ export class AuthService {
         'refresh_token is not valid ! Please login',
       );
     }
+  }
+
+  async handleLogout(user: IUser, respone: Response) {
+    await this.userService.updateUserToken('', user._id);
+    respone.clearCookie('refresh_token');
+    return '0k';
   }
 }
