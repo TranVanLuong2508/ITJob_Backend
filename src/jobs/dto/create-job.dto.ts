@@ -57,7 +57,7 @@ export class CreateJobDto {
 
   @IsNotEmpty({ message: 'endDate must not be empty' })
   @Transform(({ value }) => {
-    new Date(value);
+    return new Date(value);
   })
   @IsDate({ message: 'endDate must be in Date format' })
   endDate: Date;
