@@ -12,6 +12,7 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { ResumesModule } from './resumes/resumes.module';
 import { RolesModule } from './roles/roles.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { SubscribersModule } from './subscribers/subscribers.module';
     ResumesModule,
     RolesModule,
     SubscribersModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

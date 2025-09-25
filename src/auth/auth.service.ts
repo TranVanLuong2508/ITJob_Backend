@@ -19,6 +19,7 @@ export class AuthService {
     if (user) {
       const isValidPass = this.userService.isValidPassword(pass, user.password);
       if (isValidPass) {
+        console.log('chek user mongoose', user);
         const { password, ...result } = user.toObject();
         return result;
         // return true;
