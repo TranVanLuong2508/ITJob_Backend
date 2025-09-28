@@ -8,12 +8,15 @@ import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from 'src/users/user.interface';
 import aqp from 'api-query-params';
+import { RoleDocument } from 'src/roles/schemas/role.schema';
+import { USER_ROLE } from 'src/databases/sample';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name)
     private userModel: SoftDeleteModel<UserDocument>,
+    private roleModel: SoftDeleteModel<RoleDocument>,
   ) {}
 
   getHashPassword = (password: string) => {
@@ -63,6 +66,9 @@ export class UsersService {
         `Email: ${registerUserDto.email} already exists in the system. Please use a different email.`,
       );
     }
+
+    const userRole = await this.roleModel.findOne({ name: USER_ROLE });
+
     const hasedPassword = this.getHashPassword(registerUserDto.password);
 
     const newUser = await this.userModel.create({
@@ -72,7 +78,7 @@ export class UsersService {
       age: registerUserDto.age,
       gender: registerUserDto.gender,
       address: registerUserDto.address,
-      role: 'USER',
+      role: userRole?._id,
     });
     return newUser;
   }
