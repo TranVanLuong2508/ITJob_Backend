@@ -6,6 +6,7 @@ import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
 import { Response } from 'express';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class AuthService {
@@ -13,15 +14,22 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private roleService: RolesService,
   ) {}
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.userService.findOneByUserName(username);
     if (user) {
       const isValidPass = this.userService.isValidPassword(pass, user.password);
       if (isValidPass) {
-        console.log('chek user mongoose', user);
+        const userRole = user.role as unknown as { _id: string; name: string };
+        const temp = await this.roleService.findOne(userRole._id);
+
         const { password, ...result } = user.toObject();
-        return result;
+        const Obj = {
+          ...result,
+          permissions: temp?.permissions ?? [],
+        };
+        return Obj;
         // return true;
       }
     }
