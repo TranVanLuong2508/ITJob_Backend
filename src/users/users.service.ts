@@ -107,13 +107,19 @@ export class UsersService {
     if (!mongoose.Types.ObjectId.isValid(id)) return 'not found user';
     return await this.userModel
       .findOne({ _id: id })
-      .select(['-password', '-__v']);
+      .select(['-password'])
+      .populate({ path: 'role', select: { name: 1, _id: 1 } });
   }
 
   async findOneByUserName(username: string) {
-    return await this.userModel.findOne({
-      email: username,
-    });
+    return await this.userModel
+      .findOne({
+        email: username,
+      })
+      .populate({
+        path: 'role',
+        select: { name: 1, permissions: 1 },
+      });
   }
 
   async findUserByRefreshToken(refresh_token: string) {

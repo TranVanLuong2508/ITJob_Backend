@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UpdateResumeDto } from './dto/update-resume.dto';
 import { IUser } from 'src/users/user.interface';
 import { Resume, ResumeDocument } from 'src/resumes/schemas/resume.schema';
 import { InjectModel } from '@nestjs/mongoose';

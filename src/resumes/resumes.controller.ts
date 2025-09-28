@@ -9,8 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ResumesService } from './resumes.service';
-import { CreateResumeDto, CreateUserCvDto } from './dto/create-resume.dto';
-import { UpdateResumeDto } from './dto/update-resume.dto';
+import { CreateUserCvDto } from './dto/create-resume.dto';
 import { Public, ResponseMessage, User } from 'src/decorators/customize';
 import { IUser } from 'src/users/user.interface';
 

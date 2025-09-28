@@ -1,6 +1,7 @@
 import {
   IsDefined,
   IsEmail,
+  IsMongoId,
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
@@ -37,8 +38,8 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Address must not be empty' })
   address: string;
 
-  @IsNotEmpty({ message: 'Role must not be empty' })
-  role: string;
+  @IsMongoId({ message: 'role Must be in mongo id format' })
+  role: mongoose.Schema.Types.ObjectId;
 
   @IsNotEmptyObject()
   @IsObject()
@@ -51,7 +52,7 @@ export class RegisterUserDto {
   @IsNotEmpty({ message: 'Name must not be empty' })
   name: string;
 
-  @IsEmail({}, { message: 'Must be in email format' })
+  @IsEmail({}, { message: 'Email Must be in email format' })
   @IsNotEmpty({ message: 'Email must not be empty' })
   email: string;
 
