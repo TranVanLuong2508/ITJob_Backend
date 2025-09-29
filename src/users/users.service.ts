@@ -8,7 +8,7 @@ import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from 'src/users/user.interface';
 import aqp from 'api-query-params';
-import { RoleDocument } from 'src/roles/schemas/role.schema';
+import { Role, RoleDocument } from 'src/roles/schemas/role.schema';
 import { USER_ROLE } from 'src/databases/sample';
 
 @Injectable()
@@ -16,6 +16,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name)
     private userModel: SoftDeleteModel<UserDocument>,
+    @InjectModel(Role.name)
     private roleModel: SoftDeleteModel<RoleDocument>,
   ) {}
 

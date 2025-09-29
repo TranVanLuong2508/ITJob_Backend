@@ -14,6 +14,7 @@ import { RolesModule } from './roles/roles.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { FilesModule } from './files/files.module';
 import { DatabasesModule } from './databases/databases.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { DatabasesModule } from './databases/databases.module';
     SubscribersModule,
     FilesModule,
     DatabasesModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
