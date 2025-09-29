@@ -110,4 +110,9 @@ export class SubscribersService {
       _id: id,
     });
   }
+
+  async getSkills(user: IUser) {
+    const { email } = user;
+    return await this.subscriberModel.findOne({ email }, { skills: 1 });
+  }
 }
