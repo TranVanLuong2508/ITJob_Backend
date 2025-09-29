@@ -17,6 +17,7 @@ import {
   User,
 } from 'src/decorators/customize';
 import { IUser } from 'src/users/user.interface';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Controller('subscribers')
 export class SubscribersController {

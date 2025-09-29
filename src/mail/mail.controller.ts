@@ -8,6 +8,7 @@ import {
 } from 'src/subscribers/schemas/subscriber.schemas';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { Job, JobDocument } from 'src/jobs/schemas/job.schema';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Controller('mail')
 export class MailController {
@@ -22,6 +23,7 @@ export class MailController {
   @Get()
   @Public()
   @ResponseMessage('Test email')
+  @Cron('0 10 0 * * 0') // 0.10' am every sunday
   async handleTestEmail() {
     const subscribers = await this.subscriberModel.find({});
     for (const subs of subscribers) {
@@ -40,9 +42,10 @@ export class MailController {
           };
         });
         await this.mailerService.sendMail({
-          to: 'luong03510@gmail.com',
+          to: subs.email,
           from: '"Support Team" <support@example.com>', // override default from
-          subject: 'Welcome to Nice App! Confirm your Email',
+          subject:
+            'Welcome to ITJobs ! New job opportunities that match your skills',
           template: 'jobs', // HTML body content
           context: {
             receiver: subs.name,

@@ -15,9 +15,11 @@ import { SubscribersModule } from './subscribers/subscribers.module';
 import { FilesModule } from './files/files.module';
 import { DatabasesModule } from './databases/databases.module';
 import { MailModule } from './mail/mail.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
